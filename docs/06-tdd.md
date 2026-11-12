@@ -1,6 +1,6 @@
 # TDD — Etapa 1: Site Buffet Lages (Technical Design Document)
 
-**Versão:** 0.2 — ajustes da revisão solicitada (datas, recarregamento, indexação, fidelidade); estrutura técnica aprovada, aguardando aprovação definitiva.
+**Versão:** 0.2 — ajustes da revisão solicitada (datas, recarregamento, indexação, fidelidade); aprovada como base técnica e já versionada.
 **Base:** `docs/04-prd-inicial.md` (PRD 0.4 aprovado) e estrutura técnica aprovada pelo responsável.
 **Produto:** site público institucional e comercial do Buffet Lages (Etapa 1), em Angular.
 **Relação com o PRD:** o PRD define **o quê**; este documento define **como**. Nenhum requisito, regra de negócio ou critério de aceite é alterado aqui. Divergências, se houver, estão registradas explicitamente nas seções 16 e 17.
