@@ -1,1 +1,235 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@fontsource/source-sans-3/latin-400.css';
+@import '@fontsource/source-sans-3/latin-600.css';
+@import '@fontsource/cormorant-garamond/latin-600.css';
+
+/*
+ * Paleta aprovada: grafite, porcelana, vinho e branco.
+ * Contraste verificado (WCAG 2.2 AA):
+ * - grafite #292A2A sobre porcelana #FAF9F6: 14,2:1
+ * - branco #FFFFFF sobre grafite #292A2A: 14,4:1
+ * - branco #FFFFFF sobre vinho #56323D: 10,6:1
+ * - vinho #56323D sobre porcelana #FAF9F6: 9,7:1
+ * - foco vinho sobre porcelana: 9,7:1; foco porcelana sobre grafite: 14,4:1
+ */
+:root {
+  color-scheme: light;
+  --graphite: #292a2a;
+  --porcelain: #faf9f6;
+  --wine: #56323d;
+  --white: #ffffff;
+  --line: #e3ded5;
+  --focus: #56323d;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: clamp(3rem, 7vw, 6rem);
+  --measure: 68ch;
+  --page-width: 76rem;
+  --body-font: 'Source Sans 3', system-ui, sans-serif;
+  --display-font: 'Cormorant Garamond', Georgia, serif;
+
+  font-family: var(--body-font);
+  font-size: 100%;
+  line-height: 1.5;
+  background: var(--porcelain);
+  color: var(--graphite);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 0;
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-block-start: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display-font);
+  font-weight: 600;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 7vw, 5.75rem);
+}
+
+h2 {
+  font-size: clamp(2.125rem, 4vw, 3.75rem);
+}
+
+p {
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--wine);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--graphite);
+}
+
+button {
+  font: inherit;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.hero-carousel {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  touch-action: pan-y;
+}
+
+.hero-carousel::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: clamp(1.5rem, 5vh, 3rem);
+  background: linear-gradient(to bottom, transparent, rgba(41, 42, 42, 0.16));
+  content: '';
+  pointer-events: none;
+}
+
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transition: none;
+}
+
+.hero-carousel.has-changed .hero-photo {
+  transition: opacity 800ms ease;
+}
+
+.hero-photo.is-active {
+  opacity: 1;
+}
+
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: var(--space-3);
+}
+
+.carousel-controls button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--white);
+  background: transparent;
+  color: var(--white);
+  padding-inline: 0.75rem;
+  cursor: pointer;
+}
+
+.carousel-controls .rotation-control {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  min-height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.carousel-controls .rotation-control:focus-visible {
+  position: static;
+  width: auto;
+  height: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: 0.75rem;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  border: 1px solid var(--white);
+}
+
+.carousel-controls button:hover,
+.carousel-controls button.is-current {
+  background: var(--white);
+  color: var(--graphite);
+}
+
+.carousel-controls button:focus-visible {
+  outline: 3px solid var(--white);
+  outline-offset: 3px;
+}
+
+.carousel-indicator {
+  width: 1.5rem;
+  min-width: 1.5rem !important;
+  min-height: 0.3rem !important;
+  height: 0.3rem;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 1px;
+  background: rgba(250, 249, 246, 0.55) !important;
+}
+
+.carousel-indicator.is-current {
+  width: 2rem;
+  background: var(--white) !important;
+}
+
+.carousel-indicator:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo {
+    transition: none;
+  }
+}

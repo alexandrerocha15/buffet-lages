@@ -1,0 +1,65 @@
+<article class="menu-page section-wrap" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+  <a class="back-link" routerLink="/" fragment="cardapios">← Voltar aos cardápios</a>
+
+  @if (menu(); as selected) {
+    <div class="menu-content">
+      <header class="menu-header">
+        <h1>{{ selected.title }}</h1>
+        <p>Conheça as categorias e os pratos deste cardápio.</p>
+      </header>
+
+      @if (previousMenu(); as previous) {
+        <nav class="menu-cycle" aria-label="Navegação circular entre cardápios">
+          <a class="cycle-previous" [routerLink]="['/cardapios', previous.slug]" [attr.aria-label]="'Cardápio anterior: ' + previous.title">
+            <span aria-hidden="true">←</span><span>{{ previous.title }}</span>
+          </a>
+          @if (nextMenu(); as next) {
+            <a class="cycle-next" [routerLink]="['/cardapios', next.slug]" [attr.aria-label]="'Próximo cardápio: ' + next.title">
+              <span>{{ next.title }}</span><span aria-hidden="true">→</span>
+            </a>
+          }
+        </nav>
+      }
+
+      <div class="menu-sections">
+        @for (category of selected.categories; track $index) {
+          <section class="menu-category" [attr.aria-labelledby]="'categoria-' + $index">
+            <h2 [id]="'categoria-' + $index">{{ category.name }}</h2>
+            <ul>
+              @for (dish of category.dishes; track $index) {
+                <li>{{ dish.name }}</li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+    </div>
+
+    <footer class="menu-footer">
+      <nav class="other-menus" aria-label="Outros cardápios">
+        <h2>Outros cardápios</h2>
+        <ul>
+          @for (other of otherMenus(); track other.slug) {
+            <li><a [routerLink]="['/cardapios', other.slug]">{{ other.title }}</a></li>
+          }
+        </ul>
+      </nav>
+      <div class="how-to">
+        <h2>Como solicitar orçamento</h2>
+        <p>A solicitação de orçamento pelo site ainda não está disponível nesta etapa.</p>
+        <a routerLink="/" fragment="como-funciona">Entender os próximos passos</a>
+      </div>
+    </footer>
+  } @else if (menus.isLoading()) {
+    <p class="status" role="status">Carregando cardápio…</p>
+  } @else {
+    <section class="not-found" aria-labelledby="not-found-title">
+      <h1 id="not-found-title">Cardápio não encontrado</h1>
+      <p>O endereço acessado não corresponde a um cardápio disponível.</p>
+      <div class="not-found-actions">
+        <a routerLink="/">Voltar à página inicial</a>
+        <a routerLink="/" fragment="cardapios">Ver cardápios disponíveis</a>
+      </div>
+    </section>
+  }
+</article>

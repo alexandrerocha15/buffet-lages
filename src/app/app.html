@@ -1,1 +1,37 @@
-<router-outlet />
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" routerLink="/" (click)="closeMenu()">Buffet Lages</a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-controls="site-navigation"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="menuOpen.set(!menuOpen())"
+    >
+      {{ menuOpen() ? 'Fechar menu' : 'Abrir menu' }}
+    </button>
+    <nav
+      id="site-navigation"
+      class="site-nav"
+      aria-label="Navegação principal"
+      tabindex="-1"
+      [class.is-open]="menuOpen()"
+      (keydown)="onMenuKeydown($event)"
+    >
+      <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" #home="routerLinkActive" [attr.aria-current]="home.isActive ? 'page' : null" (click)="closeMenu()">Início</a>
+      <a routerLink="/" fragment="cardapios" (click)="closeMenu()">Cardápios</a>
+      <a class="nav-cta" routerLink="/" fragment="como-funciona" (click)="closeMenu()">Como solicitar orçamento</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo" tabindex="-1">
+  <router-outlet />
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-name">Buffet Lages</p>
+    <p>Consulte os cardápios disponíveis. Solicitar orçamento não significa contratar ou reservar uma data.</p>
+    <a routerLink="/" fragment="cardapios">Ver cardápios</a>
+  </div>
+</footer>
