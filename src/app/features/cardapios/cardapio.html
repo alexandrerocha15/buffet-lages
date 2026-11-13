@@ -35,21 +35,15 @@
       </div>
     </div>
 
-    <footer class="menu-footer">
-      <nav class="other-menus" aria-label="Outros cardápios">
-        <h2>Outros cardápios</h2>
-        <ul>
-          @for (other of otherMenus(); track other.slug) {
-            <li><a [routerLink]="['/cardapios', other.slug]">{{ other.title }}</a></li>
-          }
-        </ul>
-      </nav>
-      <div class="how-to">
-        <h2>Como solicitar orçamento</h2>
-        <p>A solicitação de orçamento pelo site ainda não está disponível nesta etapa.</p>
-        <a routerLink="/" fragment="como-funciona">Entender os próximos passos</a>
+    <section class="quote-entry" aria-labelledby="quote-entry-title">
+      <p class="quote-entry-kicker">Um cardápio para o seu momento</p>
+      <h2 id="quote-entry-title">Vamos planejar seu evento?</h2>
+      <p>Peça uma conversa sobre este cardápio ou monte uma seleção do seu jeito. A solicitação não confirma reserva ou disponibilidade.</p>
+      <div class="quote-entry-actions">
+        <button class="quote-entry-primary" type="button" (click)="beginQuote(selected, 'pronto')">Solicitar orçamento deste cardápio</button>
+        <button class="quote-entry-secondary" type="button" (click)="beginCustomMenu()">Montar meu próprio cardápio</button>
       </div>
-    </footer>
+    </section>
   } @else if (menus.isLoading()) {
     <p class="status" role="status">Carregando cardápio…</p>
   } @else {

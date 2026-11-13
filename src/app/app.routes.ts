@@ -9,6 +9,8 @@ export const routes: Routes = [
     path: 'cardapios/:slug',
     loadComponent: () => import('./features/cardapios/cardapio').then((module) => module.Cardapio),
   },
+  { path: 'montar', loadComponent: () => import('./features/orcamento/orcamento').then((module) => module.Orcamento) },
+  { path: 'orcamento', loadComponent: () => import('./features/orcamento/orcamento').then((module) => module.Orcamento) },
   {
     path: '**',
     loadComponent: () => import('./features/cardapios/cardapio').then((module) => module.Cardapio),

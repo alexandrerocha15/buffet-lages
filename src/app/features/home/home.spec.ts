@@ -87,14 +87,14 @@ describe('Home', () => {
       .toContain('rechauds');
   });
 
-  it('oferece acesso à explicação de orçamento sem rota ou contato inexistente', async () => {
+  it('oferece acesso ao fluxo de orçamento disponível', async () => {
     const element = await render();
     const links = [...element.querySelectorAll('a')];
     const hrefs = links.map((link) => link.getAttribute('href'));
 
     expect(hrefs).toContain('#como-funciona');
     expect(element.querySelector('#como-funciona')).toBeTruthy();
-    expect(element.querySelector('a[href="/orcamento"],a[href*="wa.me"],form')).toBeNull();
+    expect(element.querySelector('a[href="/orcamento"]')).toBeTruthy();
   });
 
   it('não exibe preços nem descrições de pratos inventadas', async () => {

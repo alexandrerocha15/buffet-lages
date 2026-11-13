@@ -55,15 +55,18 @@ describe('Cardapio', () => {
     },
   );
 
-  it('oferece links para os demais cardápios e para a explicação de orçamento', async () => {
+  it('apresenta os dois CTAs juntos em uma seção própria e mantém navegação entre cardápios', async () => {
     const element = await go('/cardapios/italiano');
     const links = [...element.querySelectorAll('a')].map((link) => link.getAttribute('href'));
 
     expect(links).toContain('/cardapios/churrasco');
     expect(links).toContain('/cardapios/contemporaneo');
-    expect(links).toContain('/#como-funciona');
     expect(links).not.toContain('/cardapios/italiano');
-    expect(element.querySelector('a[href="/orcamento"],a[href*="wa.me"],button,form')).toBeNull();
+    const section = element.querySelector('.quote-entry');
+    expect(section?.querySelectorAll('button')).toHaveLength(2);
+    expect(section?.textContent).toContain('Solicitar orçamento deste cardápio');
+    expect(section?.textContent).toContain('Montar meu próprio cardápio');
+    expect(element.querySelector('.how-to, .other-menus')).toBeNull();
   });
 
   it('navega circularmente conforme a quantidade atual de cardápios', async () => {

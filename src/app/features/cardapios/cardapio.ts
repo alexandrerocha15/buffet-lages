@@ -14,6 +14,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { MENU_SOURCE } from '../../core/content/menu-source';
 import type { Menu } from '../../core/models';
+import { QuoteStore } from '../../core/quote/quote-store';
 
 const MENU_PRESENTATION_ORDER = ['italiano', 'churrasco', 'contemporaneo'] as const;
 const MENUS_STATE_KEY = makeStateKey<readonly Menu[]>('cardapio-menus');
@@ -32,6 +33,17 @@ export class Cardapio {
   private readonly transferState = inject(TransferState);
   private readonly titleService = inject(Title);
   private readonly metaService = inject(Meta);
+  private readonly quoteStore = inject(QuoteStore);
+
+  protected beginQuote(menu: Menu, mode: 'pronto' | 'personalizado'): void {
+    this.quoteStore.startMenu(menu, mode);
+    void this.router.navigateByUrl('/orcamento');
+  }
+
+  protected beginCustomMenu(): void {
+    this.quoteStore.startCustom();
+    void this.router.navigateByUrl('/montar');
+  }
 
   protected readonly slug = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('slug') ?? '')),

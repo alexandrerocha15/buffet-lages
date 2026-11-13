@@ -21,7 +21,7 @@
     >
       <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" #home="routerLinkActive" [attr.aria-current]="home.isActive ? 'page' : null" (click)="closeMenu()">Início</a>
       <a routerLink="/" fragment="cardapios" (click)="closeMenu()">Cardápios</a>
-      <a class="nav-cta" routerLink="/" fragment="como-funciona" (click)="closeMenu()">Como solicitar orçamento</a>
+      <a class="nav-cta" routerLink="/orcamento" (click)="closeMenu()">Solicitar orçamento</a>
     </nav>
   </div>
 </header>

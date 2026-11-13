@@ -63,7 +63,7 @@ export class Home {
     this.titleService.setTitle('Buffet Lages — Cardápios e apresentação');
     this.metaService.updateTag({
       name: 'description',
-      content: 'Conheça o Buffet Lages, seus três cardápios e como funcionará a solicitação de orçamento.',
+      content: 'Conheça o Buffet Lages, seus três cardápios e solicite um orçamento para o seu evento.',
     });
     this.metaService.removeTag('name="robots"');
   }

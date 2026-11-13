@@ -98,50 +98,81 @@
   font-size: 1.0625rem;
 }
 
-.menu-footer {
-  display: grid;
-  gap: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--line);
+.quote-entry {
+  width: min(100%, 54rem);
+  margin: var(--space-5) auto var(--space-4);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--line);
+  background: var(--porcelain);
+  text-align: center;
 }
 
-.menu-footer h2 {
-  font-size: clamp(1.6rem, 3vw, 2.25rem);
-}
-
-.menu-footer ul {
+.quote-entry-kicker {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  color: var(--wine);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.menu-footer a {
+.quote-entry h2 {
+  margin: 0.5rem 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.quote-entry > p:not(.quote-entry-kicker) {
+  max-width: 38rem;
+  margin: 0 auto var(--space-3);
+  font-size: 1.0625rem;
+}
+
+.quote-entry-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.quote-entry-primary,
+.quote-entry-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  padding: 0.7rem 1.25rem;
+  border: 1px solid var(--wine);
+  font: inherit;
   font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.other-menus li {
-  border-bottom: 1px solid var(--line);
+.quote-entry-primary {
+  background: var(--wine);
+  color: var(--white);
 }
 
-.how-to {
-  padding: var(--space-3);
+.quote-entry-primary:hover {
   background: var(--graphite);
-  color: var(--porcelain);
+  border-color: var(--graphite);
 }
 
-.how-to h2 {
-  color: var(--white);
+.quote-entry-secondary {
+  background: transparent;
+  color: var(--wine);
 }
 
-.how-to a {
-  color: var(--white);
+.quote-entry-secondary:hover {
+  background: var(--white);
 }
 
-.how-to a:focus-visible {
-  outline-color: var(--white);
+.quote-entry-primary:focus-visible,
+.quote-entry-secondary:focus-visible {
+  outline: 3px solid var(--wine);
+  outline-offset: 3px;
 }
 
 .not-found {
@@ -167,7 +198,10 @@
 }
 
 @media (min-width: 48rem) {
-  .menu-footer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .quote-entry { margin-top: var(--space-5); }
+}
+
+@media (max-width: 34rem) {
+  .quote-entry-actions { align-items: stretch; flex-direction: column; }
+  .quote-entry-primary, .quote-entry-secondary { width: 100%; }
 }

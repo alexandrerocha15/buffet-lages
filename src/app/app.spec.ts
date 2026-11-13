@@ -59,15 +59,15 @@ describe('App', () => {
     }
   });
 
-  it('offers only working informational links while the quote flow is unavailable', () => {
+  it('offers navigation to the active quote flow', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const links: HTMLAnchorElement[] = Array.from(fixture.nativeElement.querySelectorAll('nav a'));
     expect(links.map((link) => new URL(link.href).pathname + new URL(link.href).hash)).toEqual([
       '/',
       '/#cardapios',
-      '/#como-funciona',
+      '/orcamento',
     ]);
-    expect(fixture.nativeElement.querySelector('a[href="/orcamento"],a[href*="wa.me"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('a[href="/orcamento"]')).toBeTruthy();
   });
 });
