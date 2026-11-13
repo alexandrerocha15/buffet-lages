@@ -1,0 +1,67 @@
+name: Validar e publicar no GitHub Pages
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.15.0
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Validar conteúdo, configuração, testes e lint
+        run: |
+          npm run verify:content
+          npm run test:script
+          npm run audit:quote-privacy
+          npm test -- --watch=false
+          npm run lint
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Executar testes E2E
+        run: npm run test:e2e
+
+      - name: Build de produção e validação do artefato
+        run: npm run build
+
+      - name: Empacotar artefato do GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/buffet-lages/browser
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
