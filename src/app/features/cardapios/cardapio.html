@@ -1,0 +1,59 @@
+<article class="menu-page section-wrap" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+  <a class="back-link" routerLink="/" fragment="cardapios">← Voltar aos cardápios</a>
+
+  @if (menu(); as selected) {
+    <div class="menu-content">
+      <header class="menu-header">
+        <h1>{{ selected.title }}</h1>
+        <p>Conheça as categorias e os pratos deste cardápio.</p>
+      </header>
+
+      @if (previousMenu(); as previous) {
+        <nav class="menu-cycle" aria-label="Navegação circular entre cardápios">
+          <a class="cycle-previous" [routerLink]="['/cardapios', previous.slug]" [attr.aria-label]="'Cardápio anterior: ' + previous.title">
+            <span aria-hidden="true">←</span><span>{{ previous.title }}</span>
+          </a>
+          @if (nextMenu(); as next) {
+            <a class="cycle-next" [routerLink]="['/cardapios', next.slug]" [attr.aria-label]="'Próximo cardápio: ' + next.title">
+              <span>{{ next.title }}</span><span aria-hidden="true">→</span>
+            </a>
+          }
+        </nav>
+      }
+
+      <div class="menu-sections">
+        @for (category of selected.categories; track $index) {
+          <section class="menu-category" [attr.aria-labelledby]="'categoria-' + $index">
+            <h2 [id]="'categoria-' + $index">{{ category.name }}</h2>
+            <ul>
+              @for (dish of category.dishes; track $index) {
+                <li>{{ dish.name }}</li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+    </div>
+
+    <section class="quote-entry" aria-labelledby="quote-entry-title">
+      <p class="quote-entry-kicker">Um cardápio para o seu momento</p>
+      <h2 id="quote-entry-title">Vamos planejar seu evento?</h2>
+      <p>Peça uma conversa sobre este cardápio ou monte uma seleção do seu jeito. A solicitação não confirma reserva ou disponibilidade.</p>
+      <div class="quote-entry-actions">
+        <button class="quote-entry-primary" type="button" (click)="beginQuote(selected, 'pronto')">Solicitar orçamento deste cardápio</button>
+        <button class="quote-entry-secondary" type="button" (click)="beginCustomMenu()">Montar meu próprio cardápio</button>
+      </div>
+    </section>
+  } @else if (menus.isLoading()) {
+    <p class="status" role="status">Carregando cardápio…</p>
+  } @else {
+    <section class="not-found" aria-labelledby="not-found-title">
+      <h1 id="not-found-title">Cardápio não encontrado</h1>
+      <p>O endereço acessado não corresponde a um cardápio disponível.</p>
+      <div class="not-found-actions">
+        <a routerLink="/">Voltar à página inicial</a>
+        <a routerLink="/" fragment="cardapios">Ver cardápios disponíveis</a>
+      </div>
+    </section>
+  }
+</article>

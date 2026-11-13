@@ -1,0 +1,146 @@
+<section class="quote section-wrap" aria-labelledby="quote-title">
+  <p class="eyebrow">Solicitação de orçamento</p><h1 id="quote-title">Vamos conversar sobre seu evento</h1>
+  <p class="notice">Sua seleção e o que você preencheu ficam apenas nesta página. Se você atualizar ou fechar a página, tudo será perdido — nada é salvo no navegador.</p>
+  <p class="notice">A solicitação não é reserva nem contratação. Disponibilidade e valor serão avaliados pela equipe.</p>
+  <p class="step-status" aria-live="polite">Etapa: {{ store.step() === 'selection' ? 'seleção' : store.step() === 'preview' ? 'prévia' : store.step() === 'details' ? 'dados do evento' : 'revisão' }}</p>
+  @if (store.step() === 'selection') {
+    <section aria-labelledby="quote-step-title">
+      <h2 id="quote-step-title" tabindex="-1">{{ entrySelected() ? 'Escolha os pratos do cardápio' : 'Escolha um ponto de partida' }}</h2>
+      @if (!entrySelected()) {
+        <div class="menu-choices">
+          <h3>Solicitar orçamento de um cardápio</h3>
+          <p>Você verá primeiro somente os itens do cardápio escolhido.</p>
+          @for (menu of menus(); track menu.slug) { <button class="menu-choice-button" type="button" (click)="start(menu)">{{ menu.title }}</button> }
+          <button class="menu-choice-custom" type="button" (click)="startCustom()">Montar meu próprio cardápio</button>
+        </div>
+      } @else {
+        @if (store.origin() === 'pronto' && store.baseMenu(); as base) {
+          <div class="selection-context"><p>Cardápio de origem: <strong>{{ base.title }}</strong>. Todos os itens começaram selecionados.</p>
+            <button type="button" class="expand-catalog" (click)="expandCatalog()">Adicionar pratos de outros cardápios</button>
+          </div>
+        } @else if (store.origin() === 'personalizado' && store.baseMenu(); as base) {
+          <p class="selection-context">Personalizando {{ base.title }} com o catálogo completo.</p>
+        } @else {
+          <p class="selection-context">Catálogo completo — escolha pratos das categorias disponíveis.</p>
+        }
+        <div class="category-tabs" role="tablist" aria-label="Categorias de pratos">
+          @for (category of categories(); track category.name; let index = $index) {
+            <button type="button" role="tab" [id]="'category-tab-' + index" [attr.data-index]="index" [attr.aria-selected]="selectedCategory().name === category.name" [attr.aria-controls]="'category-panel-' + index" [attr.tabindex]="selectedCategory().name === category.name ? 0 : -1" (click)="selectCategory(category.name)" (keydown)="onCategoryKeydown($event)">{{ category.name }}</button>
+          }
+        </div>
+        @if (selectedCategory(); as category) {
+          <section class="category-panel" role="tabpanel" [id]="'category-panel-' + categories().indexOf(category)" [attr.aria-labelledby]="'category-tab-' + categories().indexOf(category)" tabindex="0">
+            <h3>{{ category.name }}</h3>
+            <ul class="dish-options">
+              @for (dish of category.dishes; track dish.key) {
+                <li><label><input type="checkbox" [checked]="store.dishes().some(selected => selected.name === dish.name && selected.category === category.name)" (change)="store.toggleDish(dish, category.name)"><span>{{ dish.name }}</span></label></li>
+              }
+            </ul>
+          </section>
+        }
+      }
+      <div class="special-entry"><label for="special">Pedidos especiais</label><div class="inline"><input id="special" [value]="specialInput()" (input)="specialInput.set($any($event.target).value)" (keydown.enter)="onSpecialEnter($event)"><button type="button" (click)="addSpecialFromInput()">Adicionar</button></div></div>
+      @if (store.specials().length) {
+        <ul class="special-list" aria-label="Pedidos especiais adicionados">
+          @for (item of store.specials(); track $index) {
+            <li class="special-row">
+              @if (editingSpecial() === $index) {
+                <input class="special-edit" [id]="'special-edit-' + $index" [attr.aria-label]="'Editar pedido especial ' + ($index + 1)" [value]="specialDraft()" (input)="specialDraft.set($any($event.target).value)" (blur)="saveSpecial($index)" (keydown)="onSpecialEditKeydown($event, $index)">
+              } @else {
+                <button type="button" class="special-edit-trigger" [attr.aria-label]="'Editar pedido especial: ' + item" (click)="editSpecial($index)">{{ item }}<span class="edit-hint">Editar</span></button>
+              }
+              <button type="button" class="special-remove" [attr.aria-label]="'Remover pedido especial ' + ($index + 1) + ': ' + item" (click)="store.removeSpecial($index)"><span aria-hidden="true">×</span></button>
+            </li>
+          }
+        </ul>
+      }
+      @if (error()) { <p id="selection-error" class="error" role="alert">{{ error() }}</p> }<button class="primary" type="button" (click)="toPreview()">Pré-visualizar cardápio</button>
+    </section>
+  } @else if (store.step() === 'preview') {
+    <section class="step-panel editorial-card preview-panel" aria-labelledby="quote-step-title">
+      <h2 id="quote-step-title" tabindex="-1">Prévia do cardápio</h2>
+      <div class="editorial-sections">
+        @for (group of store.groupedDishes(); track group.name) {
+          <section class="editorial-category"><h3>{{ group.name }}</h3><ul>@for (dish of group.dishes; track dish.key) { <li>{{ dish.name }}</li> }</ul></section>
+        }
+        @if (store.specials().length) {
+          <section class="editorial-category special-preview"><h3>Pedidos especiais</h3><ul>@for (item of store.specials(); track $index) { <li>{{ item }}</li> }</ul></section>
+        }
+      </div>
+      <div class="step-actions"><button type="button" (click)="toSelection()">Voltar e editar</button><button class="primary" type="button" (click)="nextDetails()">Confirmar cardápio</button></div>
+    </section>
+  } @else if (store.step() === 'details') {
+    <form class="event-form" aria-labelledby="quote-step-title" (submit)="$event.preventDefault(); nextReview()">
+      <h2 id="quote-step-title" tabindex="-1">Dados do evento</h2>
+      <div class="required-fields">
+        <label for="guest-name">Seu nome
+          <input id="guest-name" aria-describedby="form-error" [attr.aria-invalid]="error().startsWith('Informe seu nome')" [value]="store.details().name" (input)="setDetail('name', $any($event.target).value)" autocomplete="name">
+        </label>
+        <label for="guest-count">Quantidade aproximada de convidados
+          <input id="guest-count" aria-describedby="guest-help form-error" [attr.aria-invalid]="error().startsWith('Informe uma quantidade')" inputmode="numeric" [value]="store.details().guests" (input)="setDetail('guests', $any($event.target).value)">
+        </label>
+      </div>
+      <p class="field-help" id="guest-help">Uma estimativa é suficiente.</p>
+      <fieldset class="choice-group">
+        <legend>Data do evento</legend>
+        <div class="choice-options">
+          <label><input type="radio" name="date" [checked]="store.details().date.kind === 'defined'" (change)="dateKind('defined')">Data definida</label>
+          <label><input type="radio" name="date" [checked]="store.details().date.kind === 'approximate'" (change)="dateKind('approximate')">Mês aproximado</label>
+          <label><input type="radio" name="date" [checked]="store.details().date.kind === 'unknown'" (change)="dateKind('unknown')">Ainda não sei</label>
+        </div>
+        @if (store.details().date.kind === 'defined') {
+          <div class="conditional-fields"><label class="field-label" for="event-date">Dia, mês e ano
+            <div class="datepicker-control">
+              <input id="event-date" type="text" ngbDatepicker #eventDatePicker="ngbDatepicker" navigation="arrows" [minDate]="todayStruct()" [value]="definedDate()" (dateSelect)="setDefinedDate($event)" readonly aria-label="Data do evento, dia mês e ano" placeholder="DD/MM/AAAA">
+              <button type="button" class="datepicker-toggle" aria-label="Abrir calendário do evento" (click)="openDatepicker(eventDatePicker)"><span aria-hidden="true">▦</span></button>
+            </div>
+          </label></div>
+        }
+        @if (store.details().date.kind === 'approximate') {
+          <div class="conditional-fields">
+            <label class="field-label" for="event-month">Mês
+              <select id="event-month" [value]="$any(store.details().date).month" (change)="setDetail('date', {kind:'approximate', month:+$any($event.target).value, year:$any(store.details().date).year})"><option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select>
+            </label>
+            <label class="field-label" for="event-year">Ano
+              <input id="event-year" type="number" [value]="$any(store.details().date).year" (input)="setDetail('date', {kind:'approximate', month:$any(store.details().date).month, year:+$any($event.target).value})">
+            </label>
+          </div>
+        }
+      </fieldset>
+      <fieldset class="choice-group">
+        <legend>Local do evento</legend>
+        <div class="choice-options">
+          <label><input type="radio" name="location" [checked]="store.details().location.kind === 'defined'" (change)="locationKind('defined')">Local definido</label>
+          <label><input type="radio" name="location" [checked]="store.details().location.kind === 'unknown'" (change)="locationKind('unknown')">Ainda não sei</label>
+        </div>
+        @if (store.details().location.kind === 'defined') {
+          <div class="conditional-fields">
+            <label class="field-label" for="event-city">Cidade
+              <input id="event-city" [attr.aria-invalid]="error().startsWith('Informe a cidade')" aria-describedby="form-error" [value]="$any(store.details().location).city" (input)="setDetail('location', {kind:'defined', city:$any($event.target).value})">
+            </label>
+            <label class="field-label" for="event-venue">Espaço (opcional)
+              <input id="event-venue" [value]="$any(store.details().location).venue ?? ''" (input)="setDetail('location', {...$any(store.details().location), venue:$any($event.target).value})">
+            </label>
+            <label class="field-label" for="event-address">Endereço (opcional)
+              <input id="event-address" [value]="$any(store.details().location).address ?? ''" (input)="setDetail('location', {...$any(store.details().location), address:$any($event.target).value})">
+            </label>
+          </div>
+        }
+      </fieldset>
+      <label class="notes-field" for="event-notes">Observações gerais (opcional)
+        <textarea id="event-notes" [value]="store.details().notes" (input)="setDetail('notes', $any($event.target).value)"></textarea>
+      </label>
+      @if (error()) { <p id="form-error" class="error" role="alert">{{ error() }}</p> }
+      <div class="form-actions"><button type="button" (click)="toSelection()">Voltar à seleção</button><button class="primary" type="submit">Continuar para revisão</button></div>
+    </form>
+  } @else {
+    <section class="step-panel review-panel" aria-labelledby="quote-step-title">
+      <h2 id="quote-step-title" tabindex="-1">Revise sua solicitação</h2>
+      <section class="review-event" aria-labelledby="review-event-title"><h3 id="review-event-title">Dados do evento</h3><p><strong>{{ store.details().name }}</strong> · {{ store.details().guests }} convidados</p><p>{{ store.details().date.kind === 'unknown' ? 'Data ainda não definida' : store.details().date.kind === 'approximate' ? 'Data aproximada: ' + $any(store.details().date).month + '/' + $any(store.details().date).year : 'Data: ' + $any(store.details().date).iso }}</p><p>{{ reviewLocation() }}</p>@if (store.details().notes.trim()) { <p><strong>Observações:</strong> {{ store.details().notes }}</p> }<button type="button" (click)="store.step.set('details'); focusStep()">Editar dados do evento</button></section>
+      <section class="editorial-card review-menu" aria-labelledby="review-menu-title"><h3 id="review-menu-title">Cardápio selecionado</h3><div class="editorial-sections">@for (group of store.groupedDishes(); track group.name) { <section class="editorial-category"><h4>{{ group.name }}</h4><ul>@for (dish of group.dishes; track dish.key) { <li>{{ dish.name }}</li> }</ul></section> }@if (store.specials().length) { <section class="editorial-category special-preview"><h4>Pedidos especiais</h4><ul>@for (item of store.specials(); track $index) { <li>{{ item }}</li> }</ul></section> }</div><button type="button" (click)="toSelection()">Editar cardápio</button></section>
+      <label class="confirm"><input type="checkbox" [checked]="confirmed()" (change)="confirmed.set($any($event.target).checked)">Confirmo que desejo abrir o WhatsApp. A mensagem só será enviada se eu confirmar no aplicativo.</label>
+      @if (longMessage()) { <p>A mensagem excede o limite do WhatsApp e será aberto sem texto. Copie o resumo para colá-lo no aplicativo.</p><button type="button" (click)="copy()">Copiar resumo</button> }
+      <div class="step-actions"><button class="primary" type="button" [disabled]="!confirmed()" (click)="openWhatsApp()">Enviar solicitação pelo WhatsApp</button></div><p class="error" role="status">{{ error() }}</p>
+    </section>
+  }
+</section>
