@@ -1,35 +1,82 @@
 <section class="hero" aria-labelledby="home-title">
-  <div class="hero-carousel" [class.has-changed]="hasChangedSlide()" role="region" aria-roledescription="carrossel" aria-label="Fotografias do Buffet Lages" tabindex="0"
-       (keydown)="onHeroKeydown($event)" (touchstart)="onHeroTouchStart($event)" (touchend)="onHeroTouchEnd($event)">
+  <div
+    class="hero-carousel"
+    [class.has-changed]="hasChangedSlide()"
+    role="region"
+    aria-roledescription="carrossel"
+    aria-label="Fotografias do Buffet Lages"
+    tabindex="0"
+    (keydown)="onHeroKeydown($event)"
+    (touchstart)="onHeroTouchStart($event)"
+    (touchend)="onHeroTouchEnd($event)"
+  >
     @for (slide of heroSlides; track slide.image; let index = $index) {
-      <picture class="hero-photo" [class.is-active]="activeSlide() === index" [attr.aria-hidden]="activeSlide() !== index">
-        <source type="image/avif"
-          [attr.srcset]="'/img/' + slide.image + '-400.avif 400w, /img/' + slide.image + '-800.avif 800w' + (slide.width > 1200 ? ', /img/' + slide.image + '-1200.avif 1200w' : '')"
-          sizes="100vw" />
-        <img [src]="'/img/' + slide.image + '-800.webp'"
-          [attr.srcset]="'/img/' + slide.image + '-400.webp 400w, /img/' + slide.image + '-800.webp 800w' + (slide.width > 1200 ? ', /img/' + slide.image + '-1200.webp 1200w' : '')"
-          sizes="100vw" [width]="slide.width" [height]="slide.height"
-          [attr.fetchpriority]="index === 0 ? 'high' : 'auto'" [attr.loading]="index === 0 ? 'eager' : 'lazy'"
-          decoding="async" [alt]="slide.alt" />
+      <picture
+        class="hero-photo"
+        [class.is-active]="activeSlide() === index"
+        [attr.aria-hidden]="activeSlide() !== index"
+      >
+        <source
+          type="image/avif"
+          [attr.srcset]="
+            'img/' +
+            slide.image +
+            '-400.avif 400w, img/' +
+            slide.image +
+            '-800.avif 800w' +
+            (slide.width > 1200 ? ', img/' + slide.image + '-1200.avif 1200w' : '')
+          "
+          sizes="100vw"
+        />
+        <img
+          [src]="'img/' + slide.image + '-800.webp'"
+          [attr.srcset]="
+            'img/' +
+            slide.image +
+            '-400.webp 400w, img/' +
+            slide.image +
+            '-800.webp 800w' +
+            (slide.width > 1200 ? ', img/' + slide.image + '-1200.webp 1200w' : '')
+          "
+          sizes="100vw"
+          [width]="slide.width"
+          [height]="slide.height"
+          [attr.fetchpriority]="index === 0 ? 'high' : 'auto'"
+          [attr.loading]="index === 0 ? 'eager' : 'lazy'"
+          decoding="async"
+          [alt]="slide.alt"
+        />
       </picture>
     }
   </div>
   <div class="hero-panel">
     <p class="hero-kicker">Buffet Lages</p>
     <h1 id="home-title">Um encontro começa à mesa.</h1>
-    <p class="hero-support">Conheça o Buffet Lages e explore as opções de cardápio para o seu evento.</p>
+    <p class="hero-support">
+      Conheça o Buffet Lages e explore as opções de cardápio para o seu evento.
+    </p>
     <div class="hero-actions">
       <a class="primary-link" href="#cardapios">Conhecer cardápios</a>
       <a class="secondary-link" href="#como-funciona">Como solicitar orçamento</a>
     </div>
     <div class="carousel-controls" aria-label="Controles das fotografias">
-      <button class="rotation-control" type="button" (click)="toggleRotation()" [attr.aria-pressed]="rotationPaused()">
+      <button
+        class="rotation-control"
+        type="button"
+        (click)="toggleRotation()"
+        [attr.aria-pressed]="rotationPaused()"
+      >
         {{ rotationPaused() ? 'Retomar reprodução' : 'Pausar reprodução' }}
       </button>
       @for (slide of heroSlides; track slide.image; let index = $index) {
-        <button type="button" class="carousel-indicator" [class.is-current]="activeSlide() === index"
+        <button
+          type="button"
+          class="carousel-indicator"
+          [class.is-current]="activeSlide() === index"
           [attr.aria-label]="'Mostrar fotografia ' + (index + 1) + ' de ' + heroSlides.length"
-          [attr.aria-pressed]="activeSlide() === index" (click)="selectSlide(index)"></button>
+          [attr.aria-pressed]="activeSlide() === index"
+          (click)="selectSlide(index)"
+        ></button>
       }
     </div>
   </div>
@@ -38,12 +85,23 @@
 <section class="intro section-wrap" aria-labelledby="intro-title">
   <h2 id="intro-title">Cardápios para conhecer com calma.</h2>
   <div class="intro-copy">
-    <p>Apresentamos os três cardápios disponíveis com suas categorias e pratos, na ordem em que foram organizados.</p>
-    <p>As fotografias desta página são registros institucionais do buffet e não representam um cardápio específico.</p>
+    <p>
+      Apresentamos os três cardápios disponíveis com suas categorias e pratos, na ordem em que foram
+      organizados.
+    </p>
+    <p>
+      As fotografias desta página são registros institucionais do buffet e não representam um
+      cardápio específico.
+    </p>
   </div>
 </section>
 
-<section id="cardapios" class="menus-section section-wrap" tabindex="-1" aria-labelledby="menus-title">
+<section
+  id="cardapios"
+  class="menus-section section-wrap"
+  tabindex="-1"
+  aria-labelledby="menus-title"
+>
   <div class="section-heading">
     <h2 id="menus-title">Nossos cardápios</h2>
     <p>Conheça as opções antes de seguir para a solicitação de orçamento.</p>
@@ -51,9 +109,13 @@
   <div class="menu-grid">
     @for (menu of featuredMenus(); track menu.slug; let index = $index) {
       <article class="menu-card">
-        <span class="menu-number" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+        <span class="menu-number" aria-hidden="true">{{
+          (index + 1).toString().padStart(2, '0')
+        }}</span>
         <h3>{{ menuLabel(menu) }}</h3>
-        <a [routerLink]="['/cardapios', menu.slug]">Ver {{ menuLabel(menu) }} <span aria-hidden="true">→</span></a>
+        <a [routerLink]="['/cardapios', menu.slug]"
+          >Ver {{ menuLabel(menu) }} <span aria-hidden="true">→</span></a
+        >
       </article>
     }
   </div>
@@ -62,19 +124,22 @@
 <section class="gallery section-wrap" aria-labelledby="gallery-title">
   <div class="section-heading">
     <h2 id="gallery-title">Momentos em torno da mesa</h2>
-    <p>Registros reais da apresentação do Buffet Lages. As imagens não representam um cardápio específico.</p>
+    <p>
+      Registros reais da apresentação do Buffet Lages. As imagens não representam um cardápio
+      específico.
+    </p>
   </div>
   <div class="photo-grid">
     <figure>
       <picture>
         <source
           type="image/avif"
-          srcset="/img/mesa-frutas-saladas-400.avif 400w, /img/mesa-frutas-saladas-800.avif 800w"
+          srcset="img/mesa-frutas-saladas-400.avif 400w, img/mesa-frutas-saladas-800.avif 800w"
           sizes="(min-width: 48rem) 40vw, 100vw"
         />
         <img
-          src="/img/mesa-frutas-saladas-800.webp"
-          srcset="/img/mesa-frutas-saladas-400.webp 400w, /img/mesa-frutas-saladas-800.webp 800w"
+          src="img/mesa-frutas-saladas-800.webp"
+          srcset="img/mesa-frutas-saladas-400.webp 400w, img/mesa-frutas-saladas-800.webp 800w"
           sizes="(min-width: 48rem) 40vw, 100vw"
           width="1086"
           height="1448"
@@ -89,12 +154,20 @@
       <picture>
         <source
           type="image/avif"
-          srcset="/img/mesa-richots-400.avif 400w, /img/mesa-richots-800.avif 800w, /img/mesa-richots-1200.avif 1200w"
+          srcset="
+            img/mesa-richots-400.avif   400w,
+            img/mesa-richots-800.avif   800w,
+            img/mesa-richots-1200.avif 1200w
+          "
           sizes="(min-width: 48rem) 58vw, 100vw"
         />
         <img
-          src="/img/mesa-richots-800.webp"
-          srcset="/img/mesa-richots-400.webp 400w, /img/mesa-richots-800.webp 800w, /img/mesa-richots-1200.webp 1200w"
+          src="img/mesa-richots-800.webp"
+          srcset="
+            img/mesa-richots-400.webp   400w,
+            img/mesa-richots-800.webp   800w,
+            img/mesa-richots-1200.webp 1200w
+          "
           sizes="(min-width: 48rem) 58vw, 100vw"
           width="1448"
           height="1086"
@@ -106,16 +179,24 @@
       <figcaption>Apresentação de pratos quentes.</figcaption>
     </figure>
   </div>
-
 </section>
 
 <section id="como-funciona" class="how-it-works" tabindex="-1" aria-labelledby="how-title">
   <div class="section-wrap how-inner">
     <h2 id="how-title">Como solicitar orçamento</h2>
     <div>
-      <p>Por enquanto, você pode conhecer os cardápios e seus pratos por aqui. A solicitação de orçamento pelo site ainda não está disponível nesta etapa.</p>
-      <p>Quando a solicitação estiver disponível, o buffet avaliará os detalhes do evento. Consultar um cardápio ou pedir orçamento não significa confirmar disponibilidade, reserva ou contratação.</p>
-      <a class="secondary-link" routerLink="/orcamento">Solicitar orçamento <span aria-hidden="true">→</span></a>
+      <p>
+        Por enquanto, você pode conhecer os cardápios e seus pratos por aqui. A solicitação de
+        orçamento pelo site ainda não está disponível nesta etapa.
+      </p>
+      <p>
+        Quando a solicitação estiver disponível, o buffet avaliará os detalhes do evento. Consultar
+        um cardápio ou pedir orçamento não significa confirmar disponibilidade, reserva ou
+        contratação.
+      </p>
+      <a class="secondary-link" routerLink="/orcamento"
+        >Solicitar orçamento <span aria-hidden="true">→</span></a
+      >
     </div>
   </div>
 </section>

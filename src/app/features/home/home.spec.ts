@@ -24,15 +24,15 @@ describe('Home', () => {
     const element = await render();
     const menus = await new StaticMenuSource().loadMenus();
     const expected = ['Italiano', 'Churrasco', 'Contemporâneo'];
-    const titles = [...element.querySelectorAll('.menu-card h3')].map((heading) => heading.textContent?.trim());
+    const titles = [...element.querySelectorAll('.menu-card h3')].map((heading) =>
+      heading.textContent?.trim(),
+    );
 
     expect(titles).toEqual(expected);
     expect(menus).toHaveLength(3);
-    expect([...element.querySelectorAll('.menu-card a')].map((link) => link.getAttribute('href'))).toEqual([
-      '/cardapios/italiano',
-      '/cardapios/churrasco',
-      '/cardapios/contemporaneo',
-    ]);
+    expect(
+      [...element.querySelectorAll('.menu-card a')].map((link) => link.getAttribute('href')),
+    ).toEqual(['/cardapios/italiano', '/cardapios/churrasco', '/cardapios/contemporaneo']);
   });
 
   it('mantém hero prioritário e fotografias secundárias com carregamento preguiçoso', async () => {
@@ -46,7 +46,9 @@ describe('Home', () => {
     expect(hero?.getAttribute('height')).toBe('1086');
     expect(gallery).toHaveLength(2);
     expect(gallery.every((image) => image.getAttribute('loading') === 'lazy')).toBe(true);
-    expect(gallery.every((image) => image.getAttribute('width') && image.getAttribute('height'))).toBe(true);
+    expect(
+      gallery.every((image) => image.getAttribute('width') && image.getAttribute('height')),
+    ).toBe(true);
   });
 
   it('oferece as três fotos institucionais e controles acessíveis de carrossel', async () => {
@@ -56,13 +58,17 @@ describe('Home', () => {
 
     expect(carousel).toBeTruthy();
     expect(slides).toHaveLength(3);
-    expect(slides.every((image) => image.getAttribute('src')?.startsWith('/img/'))).toBe(true);
+    expect(slides.every((image) => image.getAttribute('src')?.startsWith('img/'))).toBe(true);
     expect(slides.every((image) => image.getAttribute('alt'))).toBe(true);
     expect(element.querySelector('[aria-label="Fotografia anterior"]')).toBeNull();
     expect(element.querySelector('[aria-label="Próxima fotografia"]')).toBeNull();
     expect(element.querySelectorAll('.carousel-indicator')).toHaveLength(3);
     expect(element.querySelector('.carousel-indicator.is-current')).toBeTruthy();
-    expect([...element.querySelectorAll<HTMLButtonElement>('.carousel-indicator')].every((button) => button.tabIndex === 0)).toBe(true);
+    expect(
+      [...element.querySelectorAll<HTMLButtonElement>('.carousel-indicator')].every(
+        (button) => button.tabIndex === 0,
+      ),
+    ).toBe(true);
     expect(element.querySelector('.rotation-control')?.textContent).toContain('Pausar reprodução');
   });
 
@@ -72,19 +78,31 @@ describe('Home', () => {
     await fixture.whenStable();
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
-    const indicator = element.querySelector<HTMLButtonElement>('[aria-label="Mostrar fotografia 2 de 3"]')!;
+    const indicator = element.querySelector<HTMLButtonElement>(
+      '[aria-label="Mostrar fotografia 2 de 3"]',
+    )!;
 
     indicator.click();
     fixture.detectChanges();
-    expect(element.querySelectorAll('.hero-photo.is-active')[0]?.querySelector('img')?.getAttribute('alt'))
-      .toContain('saladas');
+    expect(
+      element
+        .querySelectorAll('.hero-photo.is-active')[0]
+        ?.querySelector('img')
+        ?.getAttribute('alt'),
+    ).toContain('saladas');
 
-    const thirdIndicator = element.querySelector<HTMLButtonElement>('[aria-label="Mostrar fotografia 3 de 3"]')!;
+    const thirdIndicator = element.querySelector<HTMLButtonElement>(
+      '[aria-label="Mostrar fotografia 3 de 3"]',
+    )!;
     thirdIndicator.focus();
     thirdIndicator.click();
     fixture.detectChanges();
-    expect(element.querySelectorAll('.hero-photo.is-active')[0]?.querySelector('img')?.getAttribute('alt'))
-      .toContain('rechauds');
+    expect(
+      element
+        .querySelectorAll('.hero-photo.is-active')[0]
+        ?.querySelector('img')
+        ?.getAttribute('alt'),
+    ).toContain('rechauds');
   });
 
   it('oferece acesso ao fluxo de orçamento disponível', async () => {
