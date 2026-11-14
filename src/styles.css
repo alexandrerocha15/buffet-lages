@@ -124,8 +124,13 @@ button:focus-visible,
   right: 0;
   bottom: 0;
   left: 0;
-  height: clamp(1.5rem, 5vh, 3rem);
-  background: linear-gradient(to bottom, transparent, rgba(41, 42, 42, 0.16));
+  height: clamp(2rem, 7vh, 4rem);
+  background: linear-gradient(
+    to top,
+    rgba(41, 42, 42, 0.22),
+    rgba(41, 42, 42, 0.1) 42%,
+    transparent
+  );
   content: '';
   pointer-events: none;
 }
@@ -205,19 +210,44 @@ button:focus-visible,
 /* ng-bootstrap date picker in the approved palette. */
 .ngb-dp-day,
 .ngb-dp-weekday,
-.ngb-dp-week-number { width: 2.5rem!important; height: 2.5rem!important; line-height: 2.5rem!important; }
+.ngb-dp-week-number {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  line-height: 2.5rem !important;
+}
 .ngb-dp-header,
-.ngb-dp-month { background: var(--porcelain)!important; }
-.ngb-dp-header { border-bottom: 1px solid var(--line); }
-.ngb-dp-weekday { color: var(--wine)!important; }
-.ngb-dp-day .btn-light { color: var(--graphite); border-radius: 50%; }
-.ngb-dp-day .btn-light:hover:not(:disabled) { background: var(--line); }
+.ngb-dp-month {
+  background: var(--porcelain) !important;
+}
+.ngb-dp-header {
+  border-bottom: 1px solid var(--line);
+}
+.ngb-dp-weekday {
+  color: var(--wine) !important;
+}
+.ngb-dp-day .btn-light {
+  color: var(--graphite);
+  border-radius: 50%;
+}
+.ngb-dp-day .btn-light:hover:not(:disabled) {
+  background: var(--line);
+}
 .ngb-dp-day .btn-primary,
-.ngb-dp-day .bg-primary { background: var(--wine)!important; color: var(--white)!important; }
-.ngb-dp-arrow-btn { color: var(--wine); }
-.ngb-dp-day.disabled { color: var(--line); }
+.ngb-dp-day .bg-primary {
+  background: var(--wine) !important;
+  color: var(--white) !important;
+}
+.ngb-dp-arrow-btn {
+  color: var(--wine);
+}
+.ngb-dp-day.disabled {
+  color: var(--line);
+}
 .ngb-dp-day:focus-visible,
-.ngb-dp-arrow-btn:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
+.ngb-dp-arrow-btn:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
+}
 
 .carousel-controls button:focus-visible {
   outline: 3px solid var(--white);

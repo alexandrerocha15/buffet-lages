@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
+  padding-block: 0.75rem;
 }
 
 .brand,
@@ -32,12 +33,37 @@
 .brand {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
   min-height: 44px;
-  font-size: clamp(1.75rem, 6vw, 2rem);
+  min-width: 44px;
+  max-width: min(50vw, 16rem);
 }
 
-.brand:hover {
-  color: var(--porcelain);
+.brand img {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-hat-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.brand-hat {
+  height: auto;
+  max-height: 2.25rem;
+  max-width: 3rem;
+}
+
+.brand-logo {
+  height: auto;
+  max-height: 2.75rem;
+  max-width: calc(100% - 3.5rem);
 }
 
 .menu-toggle {
@@ -147,12 +173,39 @@ main:focus {
 }
 
 .footer-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: var(--space-1);
+}
+
+.footer-name img {
+  display: block;
+  width: auto;
+  height: 2rem;
+  object-fit: contain;
+}
+
+@media (max-width: 57.99rem) {
+  .header-inner {
+    gap: var(--space-1);
+    padding-block: 0.5rem;
+  }
+
+  .brand-hat {
+    max-height: 2rem;
+    max-width: 2.75rem;
+  }
+
+  .brand-logo {
+    max-height: 2.5rem;
+    max-width: calc(100% - 3.25rem);
+  }
 }
 
 @media (min-width: 58rem) {
   .header-inner {
-    min-height: 5.25rem;
+    min-height: 4.5rem;
   }
 
   .menu-toggle {

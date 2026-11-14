@@ -1,7 +1,17 @@
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" routerLink="/" (click)="closeMenu()">Buffet Lages</a>
+    <div class="brand">
+      <a
+        class="brand-hat-link"
+        routerLink="/"
+        aria-label="Ir para a página inicial"
+        (click)="closeMenu()"
+      >
+        <img class="brand-hat" src="brand/logo-chapel.png" alt="" />
+      </a>
+      <img class="brand-logo" src="brand/logo-nav.png" alt="Buffet Lages" />
+    </div>
     <button
       class="menu-toggle"
       type="button"
@@ -19,7 +29,15 @@
       [class.is-open]="menuOpen()"
       (keydown)="onMenuKeydown($event)"
     >
-      <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" #home="routerLinkActive" [attr.aria-current]="home.isActive ? 'page' : null" (click)="closeMenu()">Início</a>
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        #home="routerLinkActive"
+        [attr.aria-current]="home.isActive ? 'page' : null"
+        (click)="closeMenu()"
+        >Início</a
+      >
       <a routerLink="/" fragment="cardapios" (click)="closeMenu()">Cardápios</a>
       <a class="nav-cta" routerLink="/orcamento" (click)="closeMenu()">Solicitar orçamento</a>
     </nav>
@@ -30,8 +48,11 @@
 </main>
 <footer class="site-footer">
   <div class="footer-inner">
-    <p class="footer-name">Buffet Lages</p>
-    <p>Consulte os cardápios disponíveis. Solicitar orçamento não significa contratar ou reservar uma data.</p>
+    <p class="footer-name"><img src="brand/logo-chapel.png" alt="" />Buffet Lages</p>
+    <p>
+      Consulte os cardápios disponíveis. Solicitar orçamento não significa contratar ou reservar uma
+      data.
+    </p>
     <a routerLink="/" fragment="cardapios">Ver cardápios</a>
   </div>
 </footer>

@@ -70,4 +70,27 @@ describe('App', () => {
     ]);
     expect(fixture.nativeElement.querySelector('a[href="/orcamento"]')).toBeTruthy();
   });
+
+  it('links the chapel mark to Home while keeping the horizontal logo static', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const brand: HTMLElement = fixture.nativeElement.querySelector('.brand');
+    expect(brand.tagName).toBe('DIV');
+    const hatLink = brand.querySelector<HTMLAnchorElement>('.brand-hat-link')!;
+    expect(hatLink.getAttribute('href')).toBe('/');
+    expect(hatLink.getAttribute('aria-label')).toBe('Ir para a página inicial');
+    expect(brand.querySelector('.brand-logo')?.closest('a')).toBeNull();
+    expect(
+      Array.from(brand.querySelectorAll('img')).map((image) => image.getAttribute('src')),
+    ).toEqual(['brand/logo-chapel.png', 'brand/logo-nav.png']);
+    expect(brand.querySelector<HTMLImageElement>('.brand-hat')?.alt).toBe('');
+    expect(brand.querySelector<HTMLImageElement>('.brand-logo')?.alt).toBe('Buffet Lages');
+    expect(fixture.nativeElement.querySelector('nav a[href="/"]')?.textContent).toContain('Início');
+
+    const footerName: HTMLElement = fixture.nativeElement.querySelector('.footer-name');
+    expect(footerName.textContent).toContain('Buffet Lages');
+    expect(footerName.querySelector('img')?.getAttribute('src')).toBe('brand/logo-chapel.png');
+    expect(footerName.querySelector('img')?.getAttribute('alt')).toBe('');
+  });
 });
